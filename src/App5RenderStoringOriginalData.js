@@ -7,8 +7,7 @@ class App extends Component {
     super();
 
     this.state = {
-      monsters: [], 
-      searchField: ''
+      monsters: []
     }; 
     console.log('constructor')
   }
@@ -28,10 +27,6 @@ class App extends Component {
 
   render (){
     console.log('render')
-    const filteredMonsters = this.state.monsters.filter((monster) => {
-        // return monster.name.includes(event.target.value); 
-        return monster.name.toLowerCase().includes(this.state.searchField); 
-      }); 
     return (
       <div className="App">
         <input 
@@ -39,16 +34,32 @@ class App extends Component {
           type='search' 
           placeholder='search monsters' 
           onChange={(event) => {
-            const searchField = event.target.value.toLowerCase();
+            // console.log({startingArray: this.state.monsters});
+            console.log(event.target.value); 
+            const searchString = event.target.value.toLowerCase();
+            
+            // [{name: 'Leanne'}, {name: 'Yihua'}]
+            const filteredMonsters = this.state.monsters.filter((monster) => {
+              // return monster.name.includes(event.target.value); 
+              return monster.name.toLowerCase().includes(searchString); 
+            }); 
+
             this.setState(
               () => {
-              return { searchField };
+              return { monsters: filteredMonsters };
             }, 
+            // () => {
+            //   console.log({endingArray: this.state.monsters})
+            // }
           )
 
           }} 
         />
-        {filteredMonsters.map((monster) => {
+        {/* <h1>{this.state.monster1.name}</h1>
+        <h1>{this.state.monster2.name}</h1>
+        <h1>{this.state.monster3.name}</h1> */}
+        {this.state.monsters.map((monster) => {
+            // return <h1 key={monster.name}>{monster.name}</h1>;
             return <div key={monster.id}><h1>{monster.name}</h1></div>;
         })}
       </div>
