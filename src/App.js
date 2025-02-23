@@ -45,6 +45,7 @@ class App extends Component {
       // return monster.name.includes(event.target.value); 
       return monster.name.toLowerCase().includes(searchField); 
     }); 
+
     return (
       <div className="App">
         <SearchBox 
