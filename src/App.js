@@ -1,18 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
 import './App.css';
 
 const App = () => {
   console.log('render');
-  const [searchField, setSearchField] = useState('a'); // [value, setValue];
+  const [searchField, setSearchField] = useState(''); // [value, setValue];
+  const [monsters, setMonsters] = useState([]); 
+  const [filteredMonsters, setFilterMonsters] = useState(monsters);
+  const [stringField, setStringField] = useState('');
   // console.log({ searchField });
-  console.log(searchField);
+  // console.log(searchField);
+  // console.log('render');
+
+  useEffect(() => {
+    console.log('effect fired'); 
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then((response) => response.json())
+    .then((users) => setMonsters(users));
+  }, []);
+
+  useEffect(() => {
+    const newFilteredMonsters = monsters.filter((monster) => {
+      // return monster.name.includes(event.target.value); 
+      return monster.name.toLocaleLowerCase().includes(searchField); 
+    });
+    
+    setFilterMonsters(newFilteredMonsters);
+    console.log('effect is firing');
+  }, [monsters, searchField]);
+
   const onSearchChange =(event) => {
     const searchFieldString = event.target.value.toLowerCase(); 
     setSearchField(searchFieldString);
   }
 
+  // const onStringChange = (event) => {
+  //   setStringField(event.target.value);
+  // }
+  // const filteredMonsters = monsters.filter((monster) => {
+  //   // return monster.name.includes(event.target.value); 
+  //   return monster.name.toLowerCase().includes(searchField); 
+  // });
+  
+  // console.log(filteredMonsters);
+  
   return (
     <div className='App'>
       <h1 className='app-title'>Monster Rolodex</h1>
@@ -21,6 +53,12 @@ const App = () => {
         onChangeHandler={onSearchChange}
         placeholder='search monsters'
       />
+      {/* <SearchBox 
+        onChangeHandler={onStringChange}
+        placeholder='set string'
+      /> */}
+      
+     <CardList monsters={filteredMonsters}/>
     </div>
   )
 }
